@@ -49,7 +49,7 @@ function ProductDetails() {
       }
       api.addToCart(data).then(res => {
         console.log(res?.data?.data)
-        setCart(c => [...c, { id: res?.data?.data?.id, product }])
+        setCart(c => [...c, { id: res?.data?.data?.documentId ?? String(res?.data?.data?.id), product }])
       })
         .catch(err => console.log('error', err?.response?.data || err?.message || err))
     }
