@@ -1,12 +1,13 @@
 "use client";
 
 import BreadCrumb from "@/app/_componets/BreadCrumb";
+import { CartContext } from "@/app/_context/CartContext";
 import api from "@/app/_utils/api";
 import { useUser } from "@clerk/nextjs";
 import { AlertOctagon, BadgeCheck, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 function ProductDetails() {
   const [product, setProduct] = useState(null);
@@ -17,6 +18,8 @@ function ProductDetails() {
   const router = useRouter()
   const productId = params?.productId;
   const apiUrl = "http://localhost:1337";
+
+  const { cart, setCart } = useContext(CartContext)
 
 
   const getProductDetails = async () => {
@@ -34,10 +37,21 @@ function ProductDetails() {
   };
 
   function handleAddToCart() {
-    if (!user){
+    if (!user) {
       router.push('/sign-in')
-    }else{
-      // add to cart 
+    } else {
+      const data = {
+        data: {
+          username: user.fullName,
+          email: user.primaryEmailAddress.emailAddress,
+          products: [product?.id]
+        }
+      }
+      api.addToCart(data).then(res => {
+        console.log(res?.data?.data)
+        setCart(c => [...c, { id: res?.data?.data?.id, product }])
+      })
+        .catch(err => console.log('error', err?.response?.data || err?.message || err))
     }
   }
 

@@ -3,15 +3,38 @@
 import { UserButton, useUser } from '@clerk/nextjs';
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { CartContext } from '../_context/CartContext';
+import api from '../_utils/api';
 
 function Header() {
     const { user } = useUser()
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const { cart, setCart } = useContext(CartContext)
+
     useEffect(() => {
         setIsLoggedIn(window.location.href.toString().includes('sign-in'))
     }, []);
+
+    useEffect(() => {
+        user && getCartItems();
+    }, [user])
+    const getCartItems = () => {
+        api.getUserCartItems(user.primaryEmailAddress.emailAddress).then(res => {
+            console.log('response from cart items', res?.data?.data)
+            res?.data?.data.forEach(citem => {
+                setCart((oldCart) => [
+                    ...oldCart,
+                    {
+                        id: citem.id,
+                        product: citem?.attributes?.products?.data[0]
+                    }
+                ])
+            })
+
+        })
+    }
 
     return !isLoggedIn && (
         <header className="bg-white">
@@ -133,7 +156,7 @@ function Header() {
                         </button>
                     </div>) :
                         <div className='flex items-center gap-5'>
-                            <h2 className='flex gap-1 cursor-pointer'><ShoppingCart />(0)</h2>
+                            <h2 className='flex gap-1 cursor-pointer'><ShoppingCart />({cart?.length})</h2>
                             <UserButton afterSignOutUrl='/' />
                         </div>
                     }
