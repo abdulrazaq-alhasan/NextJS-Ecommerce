@@ -6,12 +6,13 @@ import Link from 'next/link';
 import React, { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../_context/CartContext';
 import api from '../_utils/api';
+import Cart from '../_componets/Cart';
 
 function Header() {
     const { user } = useUser()
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
     const { cart, setCart } = useContext(CartContext)
+    const [isOpenCart, setIsOpenCart] = useState(false);
 
     useEffect(() => {
         setIsLoggedIn(window.location.href.toString().includes('sign-in'))
@@ -28,9 +29,8 @@ function Header() {
                     ...oldCart,
                     {
                         id: citem.id,
-                        product: citem?.attributes?.products?.data[0]
-                    }
-                ])
+                        product: citem?.products[0]
+                    }])
             })
 
         })
@@ -156,7 +156,8 @@ function Header() {
                         </button>
                     </div>) :
                         <div className='flex items-center gap-5'>
-                            <h2 className='flex gap-1 cursor-pointer'><ShoppingCart />({cart?.length})</h2>
+                            <h2 className='flex gap-1 cursor-pointer'><ShoppingCart onClick={() => setIsOpenCart(!isOpenCart)} />({cart?.length})</h2>
+                            {isOpenCart && <Cart />}
                             <UserButton afterSignOutUrl='/' />
                         </div>
                     }
