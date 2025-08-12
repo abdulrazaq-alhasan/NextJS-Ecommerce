@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
-import { CartContext } from "../_context/CartContext";
-import Link from "next/link";
+import React, { useContext } from 'react';
+import { CartContext } from '../_context/CartContext';
+import Link from 'next/link';
 
 function Cart() {
     const { cart, setcart } = useContext(CartContext);
-    console.log("cart", cart);
+    console.log('cart', cart);
 
     return (
         <div
@@ -30,12 +30,16 @@ function Cart() {
                                 <dl className="mt-0.5 space-y-px text-[10px] text-gray-600">
                                     <div>
                                         <dt className="inline">Category:</dt>
-                                        <dd className="inline">{item?.product?.category}</dd>
+                                        <dd className="inline">
+                                            {item?.product?.category}
+                                        </dd>
                                     </div>
 
                                     <div>
                                         <dt className="inline">Price: </dt>
-                                        <dd className="inline">{item?.product?.price}  $</dd>
+                                        <dd className="inline">
+                                            {item?.product?.price} $
+                                        </dd>
                                     </div>
                                 </dl>
                             </div>

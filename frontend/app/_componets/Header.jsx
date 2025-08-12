@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { UserButton, useUser } from "@clerk/nextjs";
-import { ShoppingCart } from "lucide-react";
-import Link from "next/link";
-import React, { useContext, useEffect, useState } from "react";
-import { CartContext } from "../_context/CartContext";
-import api from "../_utils/api";
-import Cart from "../_componets/Cart";
+import { UserButton, useUser } from '@clerk/nextjs';
+import { ShoppingCart } from 'lucide-react';
+import Link from 'next/link';
+import React, { useContext, useEffect, useState } from 'react';
+import { CartContext } from '../_context/CartContext';
+import api from '../_utils/api';
+import Cart from '../_componets/Cart';
 
 function Header() {
     const { user } = useUser();
@@ -15,14 +15,15 @@ function Header() {
     const [isOpenCart, setIsOpenCart] = useState(false);
 
     useEffect(() => {
-        setIsLoggedIn(window.location.href.toString().includes("sign-in"));
+        setIsLoggedIn(window.location.href.toString().includes('sign-in'));
     }, []);
+    
     useEffect(() => {
         user && getCartItems();
     }, [user]);
+
     const getCartItems = () => {
-        api
-            .getUserCartItems(user.primaryEmailAddress.emailAddress)
+        api.getUserCartItems(user.primaryEmailAddress.emailAddress)
             .then((res) => {
                 const items = (res?.data?.data || []).map((citem) => ({
                     id: citem.documentId ?? String(citem.id),
@@ -31,7 +32,10 @@ function Header() {
                 setCart(items);
             })
             .catch((err) => {
-                console.log('error', err?.response?.data || err?.message || err);
+                console.log(
+                    'error',
+                    err?.response?.data || err?.message || err
+                );
             });
     };
 
@@ -109,8 +113,8 @@ function Header() {
                                         className="text-gray-500 transition hover:text-gray-500/75"
                                         href="#"
                                     >
-                                        {" "}
-                                        Blog{" "}
+                                        {' '}
+                                        Blog{' '}
                                     </a>
                                 </li>
                             </ul>
@@ -153,9 +157,11 @@ function Header() {
                             </div>
                         ) : (
                             <div className="flex items-center gap-5">
-                                <h2 className="flex gap-1 cursor-pointer">
-                                    <ShoppingCart onClick={() => setIsOpenCart(!isOpenCart)} />(
-                                    {cart?.length})
+                                <h2 onClick={() =>
+                                    setIsOpenCart(!isOpenCart)
+                                } className="flex gap-1 cursor-pointer">
+                                    <ShoppingCart />
+                                    ({cart?.length})
                                 </h2>
                                 {isOpenCart && <Cart />}
                                 <UserButton afterSignOutUrl="/" />

@@ -13,10 +13,14 @@ const getUserCartItems = (email) =>
 
 const deleteCartItem = (id) => axiosClient.delete(`/carts/${id}`);
 
+const createOrder = (data) => axiosClient.post("/orders", data);
+
+
 export default {
     getLatestProducts,
     getProductById,
     addToCart,
     getUserCartItems,
-    deleteCartItem
+    deleteCartItem,
+    createOrder
 }
