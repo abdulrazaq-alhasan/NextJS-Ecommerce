@@ -5,7 +5,7 @@ import Image from 'next/image';
 const apiUrl = 'http://localhost:1337';
 
 function Product({ product }) {
-    console.log('product', product);
+    console.log('Product', product);
 
     return (
         <Link
